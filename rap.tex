@@ -1,0 +1,158 @@
+\documentclass{article}
+%graphique
+\usepackage{epsfig,graphicx,float}
+%math
+\usepackage{amsmath}
+
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\usepackage{graphicx}
+
+%----------NE PAS MODIFIER CE QUI EST AU DESSUS-------------
+
+\begin{document}
+
+
+\author{D\'eborah Bernon, Alp Ege Kurtulus, Marie Petit, Yohann Piouceau}
+\title{It\'erations non-lin\'eaires : bifurcation et chaos}
+
+\date{\today}
+\maketitle
+
+\section*{Synth\`ese du projet}
+Nous avons mod\'elise l'\'evolution d'une population dans le temps
+en examinant comment la solution varie lorsque l'on change les param\`etres.
+
+\tableofcontents
+
+\section{TODO}
+
+\begin{itemize}
+	\item comprendre les cycles 2, 4 ...
+	\item diagramme bifurcation $(a,x_\infty)$: code et resultats
+	\item histogramme
+
+
+\end{itemize}
+
+
+\section{Introduction}
+Les buts du projet sont d'analyser l'it\'eration logistique ci-dessous, de comprendre l'\'evolution des solutions et de voir le chaos :
+$$f(x)=ax( 1 - x )$$ si$$0 \leq a < {4}$$
+On examinera de la m\^eme facon les fonctions :
+$$f(x)=ax \pm x^3$$
+
+On suivra le plan d'avancement suivant : \\
+- Expliquer $x_{n+1}=ax_n( 1 - x_n )$ en supposant $x_n$ une population au jour $n$ \\
+- Examiner les points fixes de l'it\'eration, sont-ils stables ? \\
+- Examiner les points fixes en fonction de $a$. Que se passent-ils lorsqu'ils se d\'estabilisent \\
+- Faire un code num\'erique logi.pas \\
+- Faire un sch\'ema de bifurcation o\`u on examinera les solutions en fonction de $a$\\
+- Que se passe-t-il pour les grandes valeurs de $a$ ? Faire un histogramme des solutions dans les r\'egions chaotiques \\
+
+
+
+
+
+
+
+
+\section{Etude mathématique}
+
+Dans un premier temps, on va expliquer le mod\`ele $x_{n+1}=ax_n( 1 - x_n )$ pour l'\'evolution d'une population.
+
+Le premier terme : croissance de la population (croissance exponentielle).
+Code permettant d'obtenir les diagrammes d'evolution de la suite en fonction de $n$, suivant les valeurs de $a$. \\$->$ plus $a$ est grand et plus les bact\'eries se multiplient/ d\'eveloppent rapidement.
+
+Le second terme : facteur de r\'egulation/ limitation de la population. \\$->$ quand $x_n$ tend vers $0$, la croissance est maximale pour une valeur de $a$ et dans le cas contraire quand $x_n$ tend vers $1$, la croissance s'arr\^ete compl\`etement.
+
+La combinaison de ces termes donnent une mod\'elisation de population qui cro\^it exponentiellement au d\'ebut, puis qui ralentit \`a mesure que la population approche de la capacit\'e maximale du milieu (emp\^echant une croissance infinie).
+
+Dans un second temps, on examine les points fixes de l'it\'eration et leur stabilit\'e.
+
+
+Recherche des points fixes :
+
+  On pose x* un point fixe, c'est \`a dire $$x* = f(x*)$$
+  R\'esolution de l'\'equation : $$x* = ax (1 - x*) $$
+  D'o\`u $$x_1 = 0$$ et $$x_2 = 1 - 1/a$$
+
+$x_1$ est valable quand $a > 1$, autrement $f(x)$ tend vers $0$.
+
+La stabilit\'e v\'erifie la condition suivante : 
+Si le point fixe $x*$ est stable alors 
+$$|f'(x*)| < 1$$
+On a $f'(x) = - 2ax + a$, évaluons en $x_2 = 0$, on a : $$f'(0) = a$$ et en $x_1 = 1 - 1/a$, on a : $$f'(x_2) = - a + 2$$ et $$ - 1 < 2 - a < 1$$ donc $$ 1 < a \leq 3$$
+Ainsi, $x*$ (point fixe) est stable si $a \in ]1, 3]$ (la population se stabilise) ou si $a \in [0, 1[$ (la population s'\'eteint) et pour $ a < 3$ c'est instable et on voit un ph\'enom\`eme de bifurcation qui m\`ene au chaos.\\
+
+
+\section{Etude informatique}
+
+On cr\'ee un programme logi.pas qui permet de visualiser la fonction $f(x)=ax( 1 - x )$ en modifiant, dans un fichier d1 ou d2, les valeurs de $a$, de $x$ et de $n$. C'est-\`a-dire qu'elle permet de voir la croissance de la population selon le coefficient $a$ et le facteur de régulation $x$ pour une dur\'ee de $n$ jours. //
+
+Pour les references on utilise cite, par exemple \cite{crs01}. Les references
+sont mises avec des bibitem a la fin du fichier.
+
+\begin{verbatim}
+
+#include<stdlib.h>
+#include<stdio.h>
+#include<math.h>
+
+
+
+int main()
+{
+int jk, k;
+float a, p0, p1, var;
+		scanf("%d %f %f",&jk, &p0, &a);
+	for( k = 1 ; k <= jk ; k++)
+	{
+		p1 = a*p0*( 1 - p0 );
+		var = ( ( p1 - p0) / p0 )*100;
+		printf("%d  %f %f \n",k, p1, var );
+		p0 = p1;
+
+	}
+}
+
+
+\end{verbatim}
+
+
+Code permettant d'obtenir le diagramme de bifurcation, c'est a dire celui donnant les valeurs des points des points fixes en fonction de a.
+
+     Expression initiale : $$x_{n+1} = ax_n(1 - x_n)$$ pour  $$0 < a < 4$$
+  c'est a dire $$x_{n+1} = f(x_n) = ax_n(1 - x_n)$$
+
+On peut inserer les fichiers graphiques postcript (.eps ou .ps) avec
+epsfig voir Fig. \ref{fig1}. Les autres formats graphiques .jpg .png
+peuvent etre inseres avec includegraphics  voir Fig. \ref{fig2}.
+
+%Insertion d'une figure en eps dans le texte avec epsfig
+\begin{figure} [H] \label{fig1}
+\centerline{\epsfig{file=ham.eps,height=12cm,width=24 cm}}
+\caption{Facon avec epsfig}
+\end{figure}
+
+\begin{figure} [H]
+\centering
+\resizebox{14 cm}{5 cm}{\includegraphics{ham}}
+  \caption{Une facon avec includegraphics}
+  \label{fig2}
+\end{figure}
+
+
+
+
+
+\begin{thebibliography}{99}
+
+
+\bibitem{crs01} D. Cvetkovic, P. Rowlinson and S. Simic,
+ "An Introduction to the Theory of
+Graph Spectra",  London Mathematical Society Student Texts (No. 75), (2001).
+\end{thebibliography}
+
+
+\end{document}
