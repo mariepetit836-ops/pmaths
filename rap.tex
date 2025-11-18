@@ -3,6 +3,7 @@
 \usepackage{epsfig,graphicx,float}
 %math
 \usepackage{amsmath}
+\usepackage{hyperref}
 
 \newcommand{\be}{\begin{equation}}
 \newcommand{\ee}{\end{equation}}
@@ -85,24 +86,25 @@ $$|f'(x*)| < 1$$
 On a $f'(x) = - 2ax + a$, évaluons en $x_2 = 0$, on a : $$f'(0) = a$$ et en $x_1 = 1 - 1/a$, on a : $$f'(x_2) = - a + 2$$ et $$ - 1 < 2 - a < 1$$ donc $$ 1 < a \leq 3$$
 Ainsi, $x*$ (point fixe) est stable si $a \in ]1, 3]$ (la population se stabilise) ou si $a \in [0, 1[$ (la population s'\'eteint) et pour $ a < 3$ c'est instable et on voit un ph\'enom\`eme de bifurcation qui m\`ene au chaos.\\
 
-De façon graphique, on observe que, pour $a\geq3$, la fonction oscille entre 2 points. Pour trouver ces points, il faut déterminer les points fixes de la fonction $f∘f$.\\
+De façon graphique, on observe que, pour $a\geq3$, la fonction oscille entre 2 points. Pour trouver ces points, il faut déterminer les points fixes de la fonction $f\circ f$.\\
 
-On fait donc $f∘f$ :
-$$f∘f=a(ax_n(1-x_n))(1-(ax_n(1-x_n)))$$
-On obtient $$f∘f=a^2x_n(1-x_n)-a^3(x_n)^2(1-x_n)^2$$
-On cherche la d\'eriv\'ee de $f∘f$:
-$$(f∘f)'=a^2(1-2x_n+a2x_n+2a(x_n)^2)$$
-En cherchant les points fixes de $(f∘f)'$, on a :\\
+On fait donc $f\circ f$ :
+$$f\circ f=a(ax_n(1-x_n))(1-(ax_n(1-x_n)))$$
+On obtient $$f\circ f=a^2x_n(1-x_n)-a^3(x_n)^2(1-x_n)^2$$
+On cherche la d\'eriv\'ee de $f°f$:
+$$(f\circ f)'=a^2(1-2x_n+a2x_n+2a(x_n)^2)$$
+En cherchant les points fixes de $(f\circ f)'$, on a :\\
 $x_3=\frac{(a+1)-\sqrt{(a+1)(a-3)}}{2a}$ et $x_4=\frac{(a+1)+\sqrt{(a+1)(a-3)}}{2a}$\\
 La fonction $f(x_n)=ax_n(1-x_n)$.
 
 
+
 \section{Etude informatique}
 
-On cr\'ee un programme logi.pas qui permet de visualiser la fonction $f(x)=ax( 1 - x )$ en modifiant, dans un fichier d1 ou d2, les valeurs de $a$, de $x$ et de $n$. C'est-\`a-dire qu'elle permet de voir la croissance de la population selon le coefficient $a$ et le facteur de régulation $x$ pour une dur\'ee de $n$ jours. //
+On cr\'ee un programme logi.pas qui permet de visualiser la fonction $f(x)=ax( 1 - x )$ en modifiant, dans un fichier d1 ou d2, les valeurs de $a$, de $x$ et de $n$. C'est-\`a-dire qu'elle permet de voir la croissance de la population selon le coefficient $a$ et le facteur de régulation $x$ pour une dur\'ee de $n$ jours. \\
 
-Pour les references on utilise cite, par exemple \cite{crs01}. Les references
-sont mises avec des bibitem a la fin du fichier.
+
+
 
 \begin{verbatim}
 
@@ -154,7 +156,15 @@ peuvent etre inseres avec includegraphics  voir Fig. \ref{fig2}.
 \end{figure}
 
 
+\section{Sources}
 
+\begin{itemize}
+	\item\href{https://en.wikipedia.org/wiki/Logistic_map}{lien de la page wikip\'edia de logistic map qui nous a aid\'e \`a comprendre ce qu'est logistic map}
+	\item\href{https://www.youtube.com/watch?v=ovJcsL7vyrk}{lien d'une vid\'eo YouTube qui nous a permit de bien comprendre comment fonctionner logistic map}
+	\item\href{https://www.chiark.greenend.org.uk/~pcorbett/logistichisto.html}{lien d'un site nous permettant de visualiser la fonction de logistic map}
+
+
+\end{itemize}
 
 
 \begin{thebibliography}{99}
