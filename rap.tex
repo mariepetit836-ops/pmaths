@@ -85,6 +85,17 @@ $$|f'(x*)| < 1$$
 On a $f'(x) = - 2ax + a$, évaluons en $x_2 = 0$, on a : $$f'(0) = a$$ et en $x_1 = 1 - 1/a$, on a : $$f'(x_2) = - a + 2$$ et $$ - 1 < 2 - a < 1$$ donc $$ 1 < a \leq 3$$
 Ainsi, $x*$ (point fixe) est stable si $a \in ]1, 3]$ (la population se stabilise) ou si $a \in [0, 1[$ (la population s'\'eteint) et pour $ a < 3$ c'est instable et on voit un ph\'enom\`eme de bifurcation qui m\`ene au chaos.\\
 
+De façon graphique, on observe que, pour $a\geq3$, la fonction oscille entre 2 points. Pour trouver ces points, il faut déterminer les points fixes de la fonction $f∘f$.\\
+
+On fait donc $f∘f$ :
+$$f∘f=a(ax_n(1-x_n))(1-(ax_n(1-x_n)))$$
+On obtient $$f∘f=a^2x_n(1-x_n)-a^3(x_n)^2(1-x_n)^2$$
+On cherche la d\'eriv\'ee de $f∘f$:
+$$(f∘f)'=a^2(1-2x_n+a2x_n+2a(x_n)^2)$$
+En cherchant les points fixes de $(f∘f)'$, on a :\\
+$x_3=\frac{(a+1)-\sqrt{(a+1)(a-3)}}{2a}$ et $x_4=\frac{(a+1)+\sqrt{(a+1)(a-3)}}{2a}$\\
+La fonction $f(x_n)=ax_n(1-x_n)$.
+
 
 \section{Etude informatique}
 
