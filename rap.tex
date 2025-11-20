@@ -107,36 +107,54 @@ On cr\'ee un programme logi.pas qui permet de visualiser la fonction $f(x)=ax( 1
 
 On cr\'ee \'egalement un programme alogi.pas pour afficher le diagramme de bifurcation, qui trace $x$ en fonction de $a$, et pour cela on utilise le code ci-dessous:
 
-
-
 \begin{verbatim}
+program alogi;
 
-#include<stdlib.h>
-#include<stdio.h>
-#include<math.h>
+CONST x = 0.5; //arbitraire
+	n10 = 25; 
+	n20 = 10;
+	amax = 4;
+	amin = 2.5;  //prÃ¨s de 3 pour mieux voir la bifurcation
+	na = 1000;
 
+function transitoire(a, x : Real; n1 : Word) : Real;
+var i : Word;
+begin
+	for i:=1 to n1 do
+		x:=a*x*(1-x);
+	transitoire:=x;
+end;
 
+procedure varierX(a, x : Real; n2 : Word);
+var i : Word;
+begin
+	for i:=1 to n2 do
+	begin
+		x:=a*x*(1-x);
+		writeln(a:2:2,'       ',x:1:5);
+	end;
+end;
 
-int main()
-{
-int jk, k;
-float a, p0, p1, var;
-		scanf("%d %f %f",&jk, &p0, &a);
-	for( k = 1 ; k <= jk ; k++)
-	{
-		p1 = a*p0*( 1 - p0 );
-		var = ( ( p1 - p0) / p0 )*100;
-		printf("%d  %f %f \n",k, p1, var );
-		p0 = p1;
+procedure varierA(x, amax, amin : Real; na, n1, n2 : Word);	
+var i : Word;
+	da, a : Real;
+begin
+	da:=(amax-amin)/(na-1);
+	for i:=1 to na do
+	begin
+		a:=amin+(i-1)*da;
+		varierX(a, transitoire(a, x, n1), n2);
+	end
+end;
 
-	}
-}
-
+begin
+	varierA(x, amax, amin, na, n10, n20);
+end.
 
 \end{verbatim}
 
 
-Code permettant d'obtenir le diagramme de bifurcation, c'est a dire celui donnant les valeurs des points des points fixes en fonction de a.
+Code permettant d'obtenir le diagramme de bifurcation, c'est-\`a-dire celui donnant les valeurs des points fixes en fonction de $a$.
 
      Expression initiale : $$x_{n+1} = ax_n(1 - x_n)$$ pour  $$0 < a < 4$$
   c'est a dire $$x_{n+1} = f(x_n) = ax_n(1 - x_n)$$
