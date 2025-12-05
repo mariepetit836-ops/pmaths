@@ -26,22 +26,11 @@ en examinant comment la solution varie lorsque l'on change les param\`etres.
 
 \tableofcontents
 
-\section{TODO}
-
-\begin{itemize}
-	\item comprendre les cycles 2, 4 ...
-	\item diagramme bifurcation $(a,x_\infty)$: code et resultats
-	\item histogramme
-
-
-\end{itemize}
-
 
 \section{Introduction}
 Les buts du projet sont d'analyser l'it\'eration logistique ci-dessous, de comprendre l'\'evolution des solutions et de voir le chaos :
 $$f(x)=ax( 1 - x )$$ si$$0 \leq a < {4}$$
-On examinera de la m\^eme facon les fonctions :
-$$f(x)=ax \pm x^3$$
+\\
 
 On suivra le plan d'avancement suivant : \\
 - Expliquer $x_{n+1}=ax_n( 1 - x_n )$ en supposant $x_n$ une population au jour $n$ \\
@@ -49,7 +38,7 @@ On suivra le plan d'avancement suivant : \\
 - Examiner les points fixes en fonction de $a$. Que se passent-ils lorsqu'ils se d\'estabilisent \\
 - Faire un code num\'erique logi.pas \\
 - Faire un sch\'ema de bifurcation o\`u on examinera les solutions en fonction de $a$\\
-- Que se passe-t-il pour les grandes valeurs de $a$ ? Faire un histogramme des solutions dans les r\'egions chaotiques \\
+- Que se passe-t-il pour les grandes valeurs de $a$ ? \\
 
 
 
@@ -78,26 +67,36 @@ Recherche des points fixes :
   R\'esolution de l'\'equation : $$x* = ax (1 - x*) $$
   D'o\`u $$x_1 = 0$$ et $$x_2 = 1 - \frac{1}{a}$$
 
-$x_1$ est valable quand $a > 1$, autrement $f(x)$ tend vers $0$.
+$x_2$ est valable quand $a > 1$, autrement $f(x)$ tend vers $0$.
 
 La stabilit\'e v\'erifie la condition suivante : 
 Si le point fixe $x*$ est stable alors 
 $$|f'(x*)| < 1$$
-On a $f'(x) = - 2ax + a$, évaluons en $x_2 = 0$, on a : $$f'(0) = a$$ et en $x_1 = 1 - \frac{1}{a}$, on a : $$f'(x_1) = - a + 2$$ et $$ - 1 < 2 - a < 1$$ donc $$ 1 < a \leq 3$$
-Ainsi, $x*$ (point fixe) est stable si $a \in ]1, 3]$ (la population se stabilise) ou si $a \in [0, 1[$ (la population s'\'eteint) et pour $ a < 3$ c'est instable et on voit un ph\'enom\`eme de bifurcation qui m\`ene au chaos.\\
+Concrètement, la pente de la courbe doit être inférieure à $y=x$.
 
-De façon graphique, on observe que, pour $a\geq3$, la fonction oscille entre 2 points. Pour trouver ces points, il faut déterminer les points fixes de la fonction $f\circ f$.\\
+\begin{figure} [H] \label{fig1}
+\centerline{\epsfig{file=Graph_of_logistic_map.png,height=5cm,width=6cm}}
+\caption{Diagramme de la suite logistique}
+\end{figure}
+
+Tant que le point fixe est stable, le système continue de suivre ce modèle mais lorsque la pente augmente, la déviation s'amplifie et c'est ici que le phénomène de bifurcation né.\\
+
+On a $f'(x) = - 2ax + a$, évaluons en $x_2 = 0$, on a : $$f'(0) = a$$ et en $x_1 = 1 - \frac{1}{a}$, on a : $$f'(x_1) = - a + 2$$ et $$ - 1 < 2 - a < 1$$ donc $$ 1 < a \leq 3$$
+Ainsi, $x*$ (point fixe) est stable si $a \in ]1, 3]$ (la population se stabilise) ou si $a \in [0, 1[$ (la population s'\'eteint) et pour $ a > 3$ c'est instable et on voit un ph\'enom\`eme de bifurcation qui m\`ene au chaos.\\
+
+De façon graphique, on observe que, pour $a\geq3$, la fonction oscille entre 2 points. Pour trouver ces points, il faut déterminer les points fixes de la fonction $f\circ f$. Ils correspondent aux cycles de période 2 de la fonction logistique.\\
 
 On fait donc $f\circ f$ :
 $$f\circ f=a(ax_n(1-x_n))(1-(ax_n(1-x_n)))$$
 On obtient $$f\circ f=a^2x_n(1-x_n)-a^3(x_n)^2(1-x_n)^2$$
-On cherche la d\'eriv\'ee de $f°f$:
+On cherche la d\'eriv\'ee de $f\circ f$:
 $$(f\circ f)'=a^2(1-2x_n+a2x_n+2a(x_n)^2)$$
 En cherchant les points fixes de $(f\circ f)'$, on a :\\
 \\
 $x_3=\frac{(a+1)-\sqrt{(a+1)(a-3)}}{2a}$ et $x_4=\frac{(a+1)+\sqrt{(a+1)(a-3)}}{2a}$\\
 \\
-La fonction $f(x_n)=ax_n(1-x_n)$.
+Ces cycles apparaissent au moment de la première bifurcation (vers $a = 3$). Une cascade de bifurcations successives mène ensuite au chaos.\\
+
 
 
 
@@ -110,79 +109,58 @@ On cr\'ee \'egalement un programme alogi.pas pour afficher le diagramme de bifur
 \begin{verbatim}
 program alogi;
 
-CONST x = 0.5; //arbitraire
-	n10 = 25; 
-	n20 = 10;
-	amax = 4;
-	amin = 2.5;  //prÃ¨s de 3 pour mieux voir la bifurcation
-	na = 1000;
-
-function transitoire(a, x : Real; n1 : Word) : Real;
-var i : Word;
+var x, amax, amin, da, a : Real;
+	i, j, k, na, n1, n2 : Word;
 begin
-	for i:=1 to n1 do
-		x:=a*x*(1-x);
-	transitoire:=x;
-end;
-
-procedure varierX(a, x : Real; n2 : Word);
-var i : Word;
-begin
-	for i:=1 to n2 do
-	begin
-		x:=a*x*(1-x);
-		writeln(a:2:2,'       ',x:1:5);
-	end;
-end;
-
-procedure varierA(x, amax, amin : Real; na, n1, n2 : Word);	
-var i : Word;
-	da, a : Real;
-begin
+	read(x, n1, n2, amax, amin, na);
 	da:=(amax-amin)/(na-1);
 	for i:=1 to na do
 	begin
 		a:=amin+(i-1)*da;
-		varierX(a, transitoire(a, x, n1), n2);
+		for j:=1 to n1 do
+		x:=a*x*(1-x);
+		for k:=1 to n2 do
+		begin
+			x:=a*x*(1-x);
+			writeln(a:2:2,'       ',x:1:5);
+		end;
 	end
-end;
-
-begin
-	varierA(x, amax, amin, na, n10, n20);
 end.
 
 \end{verbatim}
 
 
-Code permettant d'obtenir le diagramme de bifurcation, c'est-\`a-dire celui donnant les valeurs des points fixes en fonction de $a$.
+Code permettant d'obtenir le diagramme de bifurcation, c'est-\`a-dire celui donnant les valeurs des points fixes en fonction de $a$. On a donc $x$ sur l'axe des ordonnées et $a$ sur l'axe des abscisses.\\
 
-     Expression initiale : $$x_{n+1} = ax_n(1 - x_n)$$ pour  $$0 < a < 4$$
-  c'est a dire $$x_{n+1} = f(x_n) = ax_n(1 - x_n)$$
+On obtient les diagrammes ci-dessous. Pour les deux, on a trac\'e les valeurs de $x$ à l'infini (réellement à 4000) en fonction de $a$, qu'on a fait varier entre deux bornes. La Figure 2 représente une intervalle de $a$ de 0.5 à 4, qui nous donne une image globale. Puis, on a augmenté la borne inférieure de $a$ à 2.5 qui est plus proche à 3, et la Figure 3 nous permet donc d'observer la bifurcation en détail.\\
 
-On peut inserer les fichiers graphiques postcript (.eps ou .ps) avec
-epsfig voir Fig. \ref{fig1}. Les autres formats graphiques .jpg .png
-peuvent etre inseres avec includegraphics  voir Fig. \ref{fig2}.
 
-%Insertion d'une figure en eps dans le texte avec epsfig
-\begin{figure} [H] \label{fig1}
-\centerline{\epsfig{file=ham.eps,height=12cm,width=24 cm}}
-\caption{Facon avec epsfig}
+\begin{figure} [H] \label{fig2}
+\centerline{\epsfig{file=asimple.eps,height=6cm,width=12cm}}
+\caption{diagramme de bifurcation 1}
 \end{figure}
 
-\begin{figure} [H]
-\centering
-\resizebox{14 cm}{5 cm}{\includegraphics{ham}}
-  \caption{Une facon avec includegraphics}
-  \label{fig2}
+
+\begin{figure} [H] \label{fig3}
+\centerline{\epsfig{file=a1simple.eps,height=6cm,width=12cm}}
+\caption{diagramme de bifurcation 2}
 \end{figure}
 
+Les figures obtenues montrent clairement la zone stable pour $a<3$, les bifurcations successives, ainsi que la zone chaotique.
+
+
+\section{Conclusion}
+
+Ce projet a permis d’illustrer comment un modèle simple peut produire une grande variété de comportements dynamiques. L’étude mathématique met en évidence les points fixes et leurs domaines de stabilité. L’implémentation informatique, notamment via le diagramme de bifurcation, montre l’apparition des cycles et du chaos.
+
+Ainsi, l’itération logistique constitue un exemple saisissant de la manière dont des règles déterministes peuvent engendrer une dynamique imprévisible, marquant la frontière entre stabilité, périodicité et chaos.\\
 
 \section{Sources}
 
 \begin{itemize}
-	\item\href{https://en.wikipedia.org/wiki/Logistic_map}{lien de la page wikip\'edia de logistic map qui nous a aid\'e \`a comprendre ce qu'est logistic map}
-	\item\href{https://www.youtube.com/watch?v=ovJcsL7vyrk}{lien d'une vid\'eo YouTube qui nous a permit de bien comprendre comment fonctionne logistic map}
-	\item\href{https://www.chiark.greenend.org.uk/~pcorbett/logistichisto.html}{lien d'un site nous permettant de visualiser la fonction de logistic map}
+	\item\url{https://en.wikipedia.org/wiki/Logistic_map}
+	\item\url{https://www.youtube.com/watch?v=ovJcsL7vyrk}
+	\item\url{https://www.chiark.greenend.org.uk/~pcorbett/logistichisto.html}
 
 
 \end{itemize}
